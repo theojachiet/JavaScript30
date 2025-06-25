@@ -59,7 +59,21 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  const buttons = Array.from(document.querySelectorAll('.key'));
+  const sounds = Array.from(document.querySelectorAll('audio'));
 
+  const playSound = (e) => {
+    sounds.forEach((sound) => {
+      if (e.currentTarget.dataset.key === sound.dataset.key) {
+        sound.play();
+        console.log('pola');
+      }
+    })
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', playSound)
+  });
 </script>
 
 
