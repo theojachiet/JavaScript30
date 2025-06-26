@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
 
@@ -58,23 +60,48 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
-  const buttons = Array.from(document.querySelectorAll('.key'));
-  const sounds = Array.from(document.querySelectorAll('audio'));
+  <script>
+    const buttons = Array.from(document.querySelectorAll('.key'));
+    const sounds = Array.from(document.querySelectorAll('audio'));
+    const keys = Array.from(document.querySelectorAll('kbd'));
 
-  const playSound = (e) => {
-    sounds.forEach((sound) => {
-      if (e.currentTarget.dataset.key === sound.dataset.key) {
-        sound.play();
-      }
+    const removePlaying = (e) => {
+      if (e.propertyName !== "transform") return;
+      e.target.classList.remove('playing');
+    };
+
+    const playSound = (e) => {
+      sounds.forEach((sound) => {
+        if (e.currentTarget.dataset.key === sound.dataset.key) {
+          sound.play();
+          sound.currentTime = 0;
+          e.currentTarget.classList.add('playing');
+        }
+      })
+    };
+
+    const playSoundFromKey = (e) => {
+      const keyPressed = e.key.toUpperCase();
+      keys.forEach((key, index) => {
+        if (key.textContent == keyPressed) {
+          sounds[index].currentTime = 0;
+          sounds[index].play();
+          buttons[index].classList.add('playing');
+        }
+      })
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', playSound);
+    });
+    window.addEventListener('keydown', playSoundFromKey);
+
+    buttons.forEach(button => {
+      button.addEventListener('transitionend', removePlaying);
     })
-  };
-
-  buttons.forEach((button) => {
-    button.addEventListener('click', playSound)
-  });
-</script>
+  </script>
 
 
 </body>
+
 </html>
